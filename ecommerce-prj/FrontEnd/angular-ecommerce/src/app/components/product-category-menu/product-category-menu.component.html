@@ -1,0 +1,16 @@
+<div class="menu-sidebar-content js-scrollbar1">
+  <nav class="navbar-sidebar">
+    <ul class="list-unstyled navbar-list">
+      <li *ngFor="let tmpptodcat of productCategories">
+        <a routerLink="/category/{{tmpptodcat.id + '/'+ tmpptodcat.categoryName }}" routerLinkActive="active-link">{{tmpptodcat.categoryName}}</a>
+      </li>
+       
+      <!-- <li>
+          <a href="#">Mouse Pads</a>
+        </li>
+        <li>
+          <a href="#">Luggage Tags</a>
+        </li> -->
+    </ul>
+  </nav>
+</div>
