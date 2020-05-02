@@ -6,6 +6,21 @@ import { Subject } from "rxjs";
   providedIn: "root",
 })
 export class CartService {
+  decrementQuantity(theCartItem: CartItem) {
+    theCartItem.quantity--;
+    if (theCartItem.quantity === 0) {
+      this.remove(theCartItem);
+    } else {
+      this.computeCartTotals();
+    }
+  }
+  remove(theCartItem: CartItem) {
+    const itemIndex = this.cartItems.findIndex((i) => i.id === theCartItem.id);
+    if (itemIndex > -1) {
+      this.cartItems.splice(itemIndex, 1);
+      this.computeCartTotals();
+    }
+  }
   cartItems: CartItem[] = [];
   totalPrices: Subject<number> = new Subject<number>();
   totalQuantity: Subject<number> = new Subject<number>();
@@ -16,10 +31,9 @@ export class CartService {
     let existingItem: CartItem = undefined;
 
     if (this.cartItems.length > 0) {
+      existingItem = this.cartItems.find((x) => x.id === cartitem.id);
 
-      existingItem=this.cartItems.find(x=>x.id===cartitem.id);
-      
-      isExistInCart = (existingItem != undefined);
+      isExistInCart = existingItem != undefined;
     }
 
     if (isExistInCart) {
@@ -34,14 +48,10 @@ export class CartService {
     let totalQuantityValue: number = 0;
 
     for (let item of this.cartItems) {
-      totalPriceValue += (item.unitPrice * item.quantity);
+      totalPriceValue += item.unitPrice * item.quantity;
       totalQuantityValue += item.quantity;
     }
     this.totalPrices.next(totalPriceValue);
     this.totalQuantity.next(totalQuantityValue);
-
-     
-    
   }
-  
 }
